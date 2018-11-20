@@ -39,3 +39,12 @@ Set unfollow(Boolean) to true if you want the bot to automatically unfollow e.i:
 Place saved file in users/ and start program to run account or place in inactive/ to leave inactive when program starts
 
 # Reading Statistics
+Stats for each account is located in stats/ 
+Files are named <account username>.txt
+
+Data is in format: 
+YYYY-MM-DD HH:MM|<Follower Count>,<Average Likes>,<Average Comments>,<Engagement Rate>
+  
+Average likes and comments are based on last three posts.
+Engagement rate is average likes plus average comments divided by followers expressed as a percent.
+Data is collected in 15 minute intervals.
