@@ -37,16 +37,8 @@ namespace instabot
             driver.FindElement(By.Name("username")).SendKeys(email);
             driver.FindElement(By.Name("password")).SendKeys(password + Keys.Return);
 
-            //driver.FindElement(By.XPath("//div[text()='Log In']")).Click();
-            //driver.FindElement(By.XPath("//div[@label='Log In']")).Click();
-            //div[1]/div/form/div[4]/button
-
             System.Threading.Thread.Sleep(Program.RandomSec(delay*5));
-            Console.WriteLine(driver.Url);
-            try { driver.FindElement(By.XPath("//button[text()='Not Now']")).Click();}
-            catch{}
-            System.Threading.Thread.Sleep(Program.RandomSec(delay*1));
-            Console.WriteLine("Done!");
+            Console.WriteLine(driver.Url+"\nDone!");
         }
 
         static void Sync()
@@ -86,15 +78,12 @@ namespace instabot
 
             Console.WriteLine("Loading driver...");
 
-            //FirefoxOptions firefoxOptions = new FirefoxOptions();
-            //firefoxOptions.AddArguments("-headless");
             ChromeOptions chromeOptions = new ChromeOptions();
-            //TODO
+            
             chromeOptions.AddArguments("headless");
             chromeOptions.AddArguments("window-size=1920,1080");
 
             IWebDriver configDriver = new ChromeDriver(chromeOptions);
-            //IWebDriver configDriver = new FirefoxDriver(firefoxOptions);
 
             configDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(configTimeout);
 

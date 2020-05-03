@@ -40,40 +40,8 @@ namespace instabot
                 }
             }
 
-            Console.WriteLine(stats[1]);
+            Console.WriteLine(stats[0]+"\n"+stats[1]);
 
-            // driver.FindElement(By.XPath("//div[1]/a/div/div[2]")).Click();
-            // for(int i=1;i<postCount+1;i++)
-            // {
-            //     try
-            //     {
-            //         stats[0] = stats[0]+int.Parse(driver.FindElement(By.XPath("//div[3]/div/div[2]/div/article/div[2]/section[2]/div/button/span")).Text);
-            //     }
-            //     catch
-            //     {
-            //         driver.FindElement(By.XPath("//section[2]/div/span/span")).Click();
-            //         System.Threading.Thread.Sleep(Program.RandomSec(delay));
-            //         Console.WriteLine(driver.FindElement(By.XPath("//div[4]/span")).Text+" YEEE");
-            //         stats[0] = stats[0]+int.Parse(driver.FindElement(By.XPath("//div[3]/div/div[2]/div/article/div[2]/section[2]/div/div/div[4]/span")).Text);
-            //         driver.FindElement(By.XPath("/html/body/div[3]/div/div[2]/div/article/div[2]/section[2]/div/div/div[1]")).Click();
-            //     }
-                
-            //     if(driver.FindElements(By.XPath("//div[3]/div/div[1]/div/div/a")).Count>1)
-            //     {
-            //         driver.FindElement(By.XPath("//div[3]/div/div[1]/div/div/a[2]")).Click();
-            //     }
-            //     else
-            //     {
-            //         try
-            //         {
-            //             driver.FindElement(By.XPath("//div[3]/div/div[1]/div/div/a")).Click();
-            //         }
-            //         catch{}
-            //     }
-            //     System.Threading.Thread.Sleep(Program.RandomSec(delay));
-            // }
-
-            Console.WriteLine(stats[0]);
             for(int i=0;i<2;i++){stats[i]=stats[i]/postCount;}
             
             return stats;  
@@ -87,9 +55,6 @@ namespace instabot
 
                 System.Threading.Thread.Sleep(Program.RandomSec(delay*2));
 
-                //int followingCount = int.Parse(driver.FindElement(By.XPath("//*[@id=\"react-root\"]/section/main/div/header/section/ul/li[3]/a/span")).Text.Replace(",", ""));
-                //int followerCount = int.Parse(driver.FindElement(By.XPath("//*[@id=\"react-root\"]/section/main/div/header/section/ul/li[2]/a/span")).Text.Replace(",", ""));
-                //a[@href="/nature.verge/followers/"]/span
                 int followingCount = int.Parse(driver.FindElement(By.XPath("//a[@href=\"/"+name+"/following/\"]/span")).Text.Replace(",", ""));
                 int followerCount = int.Parse(driver.FindElement(By.XPath("//a[@href=\"/"+name+"/followers/\"]/span")).Text.Replace(",", ""));
 
@@ -100,7 +65,6 @@ namespace instabot
                 stats[2] = interactions[1];
 
                 Console.WriteLine((int)(((float)((float)stats[1]+(float)stats[2])/(float)followerCount)*100f)+"%");
-                
 
                 driver.Navigate().GoToUrl("https://www.instagram.com/"+name);
 
@@ -112,30 +76,15 @@ namespace instabot
                     Console.WriteLine("Following "+followingCount+" people!\nUnfollowing...");
                     
                     try{
-                        //IWebElement topElement = driver.FindElement(By.XPath("//li[1]/div"));
                         Actions actions = new Actions(driver);
 
                         actions.Click(driver.FindElement(By.XPath("//div[2]/ul/div/li[1]")));
                         actions.SendKeys(Keys.End).Build().Perform();
-                        //actions.Click(topElement).Build().Perform();
-
 
                         while(driver.FindElements(By.XPath("//div[2]/ul/div/li["+(unfollowStart+unfollowAmount+2)+"]")).Count == 0 )
                         {
                             actions.SendKeys(Keys.End).Build().Perform();
                         }
-
-                        // for(int i=1;i<unfollowStart+unfollowAmount+2;)
-                        // {
-                        //     try
-                        //     {
-                        //         actions.Click(driver.FindElement(By.XPath("//div[2]/ul/div/li["+i.ToString()+"]"))).Build().Perform();
-                        //         i++;
-                        //     }
-                        //     catch(Exception e){Console.WriteLine(e.ToString());}
-                        //     actions.SendKeys(Keys).Build().Perform();
-                        //     Console.WriteLine(i);
-                        // }
 
                         try{
                             for(int i=unfollowStart;i<unfollowStart+unfollowAmount;i++)
@@ -146,9 +95,9 @@ namespace instabot
                                 driver.FindElement(By.CssSelector("button.aOOlW.-Cab_")).Click();
                             }
                         }
-                        finally{}
+                        catch{}
                     }
-                    finally{}
+                    catch{}
                 }
                 else
                 { 
@@ -156,40 +105,8 @@ namespace instabot
                 }
                 return stats;
             }
-            finally{}
+            catch{}
         }
-
-        // static void FollowSources(IWebDriver driver, string[] sources)
-        // {
-        //     string source = sources[new Random().Next(sources.Length-1)];
-        //     try{driver.Navigate().GoToUrl("https://www.instagram.com/" + source + "/");}
-        //     finally{}
-        //     try
-        //     {
-        //         driver.FindElement(By.CssSelector("css=a.-nal3.")).Click();
-        //         for(int i=1;i<6;i++)
-        //         {
-        //             driver.FindElement(By.XPath("//li["+i+"]/div/div[2]/button")).Click();
-        //         }
-        //     }
-        //     finally{}
-        // }
-        // static void InteractSources(IWebDriver driver, string[] sources)
-        // {
-        //     string source = sources[new Random().Next(sources.Length-1)];
-        //     try{driver.Navigate().GoToUrl("https://www.instagram.com/" + source + "/");}
-        //     finally{}
-        //     try
-        //     {
-        //         driver.FindElement(By.CssSelector("css=a.-nal3.")).Click();
-        //         for(int i=1;i<6;i++)
-        //         {
-        //             driver.FindElement(By.XPath("//li["+i+"]/div/div[2]/button")).Click();
-        //         }
-        //     }
-        //     finally{}
-        // }
-
     
         // Likes first division of loaded recent posts
         static int[] Explore(IWebDriver driver, string tag, String[] comments, int skipRate, int followRate, int commentRate, int delay, int totalLike, int totalComment, int totalFollow, int maxLike, int maxFollow)
@@ -221,17 +138,13 @@ namespace instabot
                     if(Program.Odds(skipRate)) // Adds randomness to simulate humans
                     {
                         Console.WriteLine("1");
-                        //String baseXPath = "/html/body/div[3]/div/div[2]/div/article";
 
                         if(totalLike+stats[1]<maxLike)
                         {
                             Console.WriteLine(driver.Url);
                             stats[1]++;
-                            //driver.FindElement(By.XPath(baseXPath+"/div[2]/section[1]/span[1]/button/span")).Click(); // Like any post that is not skipped
-                            driver.FindElement(By.XPath("//section[1]/span[1]/button")).Click();
+                            driver.FindElement(By.XPath("//section[1]/span[1]/button")).Click(); // Like any post that is not skipped
                             Console.WriteLine("Liked: " + driver.Url);
-
-                            //driver.FindElement(By.XPath("//button[text()='Cancel']")).Click();
 
                             System.Threading.Thread.Sleep(Program.RandomSec(delay*1));
                         }
@@ -240,14 +153,8 @@ namespace instabot
                         {
                             Console.WriteLine("3");
                             stats[3]++;
-                            //driver.FindElement(By.XPath(baseXPath+"//button")).Click();
                             
                             driver.FindElements(By.XPath("//button[text()='Follow']"))[1].Click();
-                            //driver.FindElement(By.XPath("//button[text()='Cancel']")).Click();
-                            
-                            //driver.FindElement(By.XPath("//button[text()='Follow']"))[1].Click();
-                            ///html/body/div[3]/div[2]/div/article/header/div[2]/div[1]/div[2]/button
-                            ////button[contains(text(),'Add Strategy')]
                             Console.WriteLine("Followed!");
                         }
                         
@@ -256,19 +163,13 @@ namespace instabot
                             Console.WriteLine("4");
                             stats[2]++;
                             
-                            //driver.FindElement(By.CssSelector("span.glyphsSpriteComment__outline__24__grey_9.u-__7")).Click();
-                            
-                            //IWebElement comment = driver.FindElement(By.CssSelector("textarea.Ypffh"));
-                            //IWebElement comment = driver.FindElement(By.XPath("//textarea[@aria-label='Add a comment…']"));
                             driver.FindElement(By.XPath("//section[1]/span[2]/button")).Click();
-                            //driver.FindElement(By.XPath("//button[text()='Cancel']")).Click();
                             actions.SendKeys(comments[new Random().Next(1, comments.Length)-1]+Keys.Enter);
                             System.Threading.Thread.Sleep(Program.RandomSec(delay*2)); // Adds delay to act as if typing
                             Console.WriteLine("Commented");                    
                         }
                     } 
                     stats[0]++;
-                    //driver.FindElement(By.XPath("/html/body/div[3]/div/button")).Click(); // Close the post
                     driver.FindElement(By.XPath("//div[4]/div[3]/button")).Click(); // Close the post
                 }
                 catch(Exception e)
