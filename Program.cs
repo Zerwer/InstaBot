@@ -24,7 +24,7 @@ namespace instabot
             else{
                 return false;
             }
-        }
+        }        
         //Takes the webdriver, email and password of account to login to instagram
         static void Login(IWebDriver driver, string email, string password, int delay)
         {
@@ -35,11 +35,17 @@ namespace instabot
             Console.WriteLine("Done!\nEntering credentials...");
 
             driver.FindElement(By.Name("username")).SendKeys(email);
-            driver.FindElement(By.Name("password")).SendKeys(password);
+            driver.FindElement(By.Name("password")).SendKeys(password + Keys.Return);
 
-            driver.FindElement(By.XPath("//div[1]/div/form/div[3]/button")).Click();
+            //driver.FindElement(By.XPath("//div[text()='Log In']")).Click();
+            //driver.FindElement(By.XPath("//div[@label='Log In']")).Click();
+            //div[1]/div/form/div[4]/button
 
             System.Threading.Thread.Sleep(Program.RandomSec(delay*5));
+            Console.WriteLine(driver.Url);
+            try { driver.FindElement(By.XPath("//button[text()='Not Now']")).Click();}
+            catch{}
+            System.Threading.Thread.Sleep(Program.RandomSec(delay*1));
             Console.WriteLine("Done!");
         }
 
@@ -71,7 +77,7 @@ namespace instabot
             int configMaxLike = 40; // Max amount of posts that can be liked in 15 minutes without getting banned
             int configMaxFollow = 15; // Max amount of people that can be followed in 15 minutes without getting banned
             int configUnfollowAmount = 15; // How many people should be unfollowed every 15 minutes (Max 15)
-            int configUnfollowStart = 50; // The next nth(configUnfollowAmount) people after this number will be unfollowed
+            int configUnfollowStart = 30; // The next nth(configUnfollowAmount) people after this number will be unfollowed
             int configDelay = 3; // Delay multiplier (More=Slower)
             int configTimeout = 10; // Timeout period
             int configUnfollowMinimum = 200; // Minimum amount of people being followed before the clear function is used
@@ -85,6 +91,7 @@ namespace instabot
             ChromeOptions chromeOptions = new ChromeOptions();
             //TODO
             chromeOptions.AddArguments("headless");
+            chromeOptions.AddArguments("window-size=1920,1080");
 
             IWebDriver configDriver = new ChromeDriver(chromeOptions);
             //IWebDriver configDriver = new FirefoxDriver(firefoxOptions);
@@ -101,32 +108,32 @@ namespace instabot
 
             while(true)
             {
-                if(configNocturnal==false)
+                if(configNocturnal == false)
                 {
-                    if(DateTime.Now.Hour<2||(DateTime.Now.Hour==2&&DateTime.Now.Minute<=30))
+                    if(DateTime.Now.Hour < 2 || (DateTime.Now.Hour == 2 && DateTime.Now.Minute <= 30))
                     {
-                        decimal i = Convert.ToDecimal(DateTime.Now.Hour+(DateTime.Now.Minute/60));
-                        System.Threading.Thread.Sleep(Convert.ToInt32((2.5M-i)*3600000));
+                        decimal i = Convert.ToDecimal(DateTime.Now.Hour+(DateTime.Now.Minute / 60));
+                        System.Threading.Thread.Sleep(Convert.ToInt32((2.5M - i) * 3600000));
                     }
-                    else if(DateTime.Now.Hour<7&&DateTime.Now.Hour>3||(DateTime.Now.Hour==3&&DateTime.Now.Minute>=30))
+                    else if(DateTime.Now.Hour < 7 && DateTime.Now.Hour > 3 || (DateTime.Now.Hour == 3 && DateTime.Now.Minute >= 30))
                     {
-                        decimal i = Convert.ToDecimal(DateTime.Now.Hour+(DateTime.Now.Minute/60));
-                        System.Threading.Thread.Sleep(Convert.ToInt32((7M-i)*3600000));
+                        decimal i = Convert.ToDecimal(DateTime.Now.Hour+(DateTime.Now.Minute / 60));
+                        System.Threading.Thread.Sleep(Convert.ToInt32((7M - i) * 3600000));
                     }
-                    else if(DateTime.Now.Hour==12&&DateTime.Now.Minute>=30)
+                    else if(DateTime.Now.Hour == 12 && DateTime.Now.Minute >= 30)
                     {
-                        decimal i = Convert.ToDecimal(DateTime.Now.Hour+(DateTime.Now.Minute/60));
-                        System.Threading.Thread.Sleep(Convert.ToInt32((13M-i)*3600000));
+                        decimal i = Convert.ToDecimal(DateTime.Now.Hour+(DateTime.Now.Minute / 60));
+                        System.Threading.Thread.Sleep(Convert.ToInt32((13M - i) * 3600000));
                     }
-                    else if(DateTime.Now.Hour==18&&DateTime.Now.Minute>=30)
+                    else if(DateTime.Now.Hour == 18 && DateTime.Now.Minute >= 30)
                     {
-                        decimal i = Convert.ToDecimal(DateTime.Now.Hour+(DateTime.Now.Minute/60));
-                        System.Threading.Thread.Sleep(Convert.ToInt32((19M-i)*3600000));
+                        decimal i = Convert.ToDecimal(DateTime.Now.Hour+(DateTime.Now.Minute / 60));
+                        System.Threading.Thread.Sleep(Convert.ToInt32((19M - i) * 3600000));
                     }
-                    else if(DateTime.Now.Hour>=23)
+                    else if(DateTime.Now.Hour >= 23)
                     {
-                        decimal i = Convert.ToDecimal(DateTime.Now.Hour+(DateTime.Now.Minute/60));
-                        System.Threading.Thread.Sleep(Convert.ToInt32((24M-i+2.5M)*3600000));
+                        decimal i = Convert.ToDecimal(DateTime.Now.Hour+(DateTime.Now.Minute / 60));
+                        System.Threading.Thread.Sleep(Convert.ToInt32((24M - i + 2.5M) * 3600000));
                     }
                 }
 
